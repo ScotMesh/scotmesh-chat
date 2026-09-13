@@ -2,7 +2,7 @@
 # only makes one outbound TCP connection, to `backbone`.
 services:
   scotmesh-chat:
-    image: ghcr.io/a13xb0/scotmesh-chat:latest
+    image: ghcr.io/scotmesh/scotmesh-chat:latest
     restart: unless-stopped
     stop_grace_period: 30s
     volumes:

@@ -20,6 +20,39 @@ machine.
 > it replaces is tag `v0.1.1`. Contributors: read `CONTRIBUTING.md`;
 > `make check` is the gate.
 
+## Quick start
+
+**Docker** is the fastest way to run it — one image, configured entirely
+through `SCOTMESH_CHAT_*` environment variables, no config file needed:
+
+```
+docker run -d --name scotmesh-chat \
+  -e SCOTMESH_CHAT_BACKBONE=rns.example.net:4242 \
+  -e SCOTMESH_CHAT_HUB_NAME="Highland Mesh" \
+  -e SCOTMESH_CHAT_ADMINS=0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f \
+  -v scotmesh-chat-data:/data \
+  ghcr.io/scotmesh/scotmesh-chat:latest
+```
+
+`SCOTMESH_CHAT_BACKBONE` is the only setting you must supply: `host:port` of
+a Reticulum TCP server to connect to. The named volume holds the hub's
+identities and database — back it up, since the identities are the hub's
+addresses. For a fuller example (custom banner, more settings, no ports
+published) copy `deploy/docker-compose.example.yml` to `docker-compose.yml`
+and run `docker compose up -d`. Every TOML setting has an env var
+equivalent; see `docs/configuration.md` for the full reference.
+
+**Without Docker**, install the binary as a systemd service instead:
+
+```
+sudo ./deploy/install.sh    # from a folder with the binary, the unit and config.example.toml
+scotmesh-chat --config /etc/scotmesh-chat/config.toml --check-config
+```
+
+Either way, identities live under `data_dir` (`identities/rrc-hub`,
+`identities/group`, `identities/page`) — they're the hub's addresses, so
+keep them backed up.
+
 ## What people get
 
 - **One name per identity, everywhere.** Your Reticulum identity claims a
@@ -70,16 +103,6 @@ The end-to-end runner starts rnsd and an lxmd propagation node on
 127.0.0.1, then the hub. It drives stock clients: NomadNet's RRC client,
 Python LXMF and page requests over real links. The Python needs `rns`, `lxmf`
 and `nomadnet`.
-
-## Run
-
-```
-sudo ./deploy/install.sh    # from a folder with the binary, the unit and config.example.toml
-scotmesh-chat --config /etc/scotmesh-chat/config.toml --check-config
-```
-
-Identities live in `data_dir/identities/` (`rrc-hub`, `group`, `page`). Those
-files are the hub's addresses, so keep them backed up.
 
 ## Licence
 

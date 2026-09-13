@@ -108,7 +108,7 @@ docker run -d \
   -e SCOTMESH_CHAT_ADMINS=0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f \
   -e SCOTMESH_CHAT_LOG_FORMAT=json \
   -v scotmesh-chat-data:/data \
-  ghcr.io/a13xb0/scotmesh-chat:latest
+  ghcr.io/scotmesh/scotmesh-chat:latest
 ```
 
 See `deploy/docker-compose.example.yml` for a fuller example, including a
