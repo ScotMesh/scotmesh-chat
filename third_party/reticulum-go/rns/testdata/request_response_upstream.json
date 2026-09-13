@@ -1,0 +1,21 @@
+{
+  "_about": "SPEC \u00a711 REQUEST/RESPONSE envelopes packed by upstream RNS's bundled umsgpack (RNS/vendor/umsgpack.py), the same encoder every RNS signing input uses.",
+  "rns_version_at_generation": "1.5.0",
+  "timestamp": 1756300000.5,
+  "get_path": "/page/index.mu",
+  "get_path_hash_hex": "fb40abf359b3f25fa0086107c5eee516",
+  "get_envelope_hex": "93cb41da2bc0b8200000c410fb40abf359b3f25fa0086107c5eee516c0",
+  "form_path": "/page/guestbook.mu",
+  "form_path_hash_hex": "39ee03fe100568ce35b9d9e503bfab25",
+  "form_data": {
+    "field_message": "hello",
+    "var_username": "alice"
+  },
+  "form_envelope_hex": "93cb41da2bc0b8200000c41039ee03fe100568ce35b9d9e503bfab2582ad6669656c645f6d657373616765a568656c6c6fac7661725f757365726e616d65a5616c696365",
+  "form_envelope_double_packed_hex": "93cb41da2bc0b8200000c41039ee03fe100568ce35b9d9e503bfab25c42882ad6669656c645f6d657373616765a568656c6c6fac7661725f757365726e616d65a5616c696365",
+  "_trap": "form_envelope_double_packed_hex is what an implementation emits if it msgpacks `data` before putting it in the envelope. Element [2] then decodes as bytes rather than a map, and every upstream handler drops the request silently (\u00a711.1).",
+  "get_messages_path": "/get",
+  "get_messages_envelope_hex": "93cb41da2bc0b8200000c4109dc1a72883468f57fed571e796e9ce9892c092a461616262a463636464",
+  "response_request_id_hex": "00112233445566778899aabbccddeeff",
+  "response_envelope_hex": "92c41000112233445566778899aabbccddeeff82a6737461747573a26f6ba16e03"
+}

@@ -1,0 +1,35 @@
+[Unit]
+Description=ScotMesh Chat hub (RRC room, LXMF group, NomadNet page)
+Documentation=https://wiki.scotmesh.net/wiki/The_chat_room
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=scotmesh-chat
+Group=scotmesh-chat
+ExecStartPre=/opt/scotmesh-chat/scotmesh-chat --config /etc/scotmesh-chat/config.toml --check-config
+ExecStart=/opt/scotmesh-chat/scotmesh-chat --config /etc/scotmesh-chat/config.toml
+TimeoutStopSec=30
+Restart=always
+RestartSec=10
+
+# It needs one outbound TCP connection to the backbone and its own data folder.
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/scotmesh-chat
+MemoryMax=256M
+
+[Install]
+WantedBy=multi-user.target

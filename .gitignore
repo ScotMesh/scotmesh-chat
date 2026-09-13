@@ -1,0 +1,7 @@
+/scotmesh-chat
+__pycache__/
+*.pyc
+/bin/
+cover.out
+*.test
+testdata/fuzz/**/corpus-local/

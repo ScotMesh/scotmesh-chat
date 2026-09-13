@@ -1,0 +1,9 @@
+# package  floor-percent
+# Every core package gets a gate when it lands; floors only ever go up.
+rrc/wire 90
+internal/store 80
+internal/hub 85
+internal/rrcsrv 80
+internal/lxmfgroup 80
+internal/nomadpage 85
+internal/importer 80

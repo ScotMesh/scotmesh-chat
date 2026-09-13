@@ -1,0 +1,22 @@
+scotmesh-chat
+Copyright (c) 2026 ScotMesh. MIT License (see LICENSE).
+
+This product includes software derived from the following projects.
+
+rrcd — Reticulum Relay Chat hub daemon
+  https://github.com/kc1awv/rrcd
+  Copyright (c) 2025 S. Miller, KC1AWV
+  MIT License
+  The RRC server (rrc/wire, internal/hub, internal/rrcsrv) ports rrcd's
+  protocol behaviour, room model and command set from Python to Go.
+  Files derived from rrcd say so in their header.
+
+reticulum-go — pure-Go Reticulum and LXMF
+  https://github.com/thatSFguy/reticulum-go
+  Copyright (c) 2026 thatSFguy
+  MIT License
+  Vendored with ScotMesh patches in third_party/reticulum-go; see
+  third_party/reticulum-go/SCOTMESH-PATCHES.md and its LICENSE.
+
+The following are used as Go module dependencies under their own licences:
+  github.com/fxamacker/cbor/v2 (MIT), github.com/BurntSushi/toml (MIT).

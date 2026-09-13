@@ -1,0 +1,8 @@
+# Go build artifacts
+*.exe
+*.test
+*.out
+/bin/
+# Keys / identities — never commit
+*.key
+*.identity

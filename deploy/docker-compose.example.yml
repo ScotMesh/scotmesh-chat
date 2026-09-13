@@ -1,0 +1,18 @@
+# Copy to docker-compose.yml and adjust. No ports are published: the hub
+# only makes one outbound TCP connection, to `backbone`.
+services:
+  scotmesh-chat:
+    image: ghcr.io/a13xb0/scotmesh-chat:latest
+    restart: unless-stopped
+    stop_grace_period: 30s
+    volumes:
+      # Identities live here — they're the hub's addresses. Back this up.
+      - ./data:/data
+      - ./banner.mu:/config/banner.mu:ro
+    environment:
+      SCOTMESH_CHAT_BACKBONE: rns.example.net:4242
+      SCOTMESH_CHAT_HUB_NAME: Highland Mesh
+      SCOTMESH_CHAT_HUB_GROUP_ROOM: highland
+      SCOTMESH_CHAT_ADMINS: 0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f
+      SCOTMESH_CHAT_LOG_FORMAT: json
+      SCOTMESH_CHAT_PAGE_BANNER_FILE: /config/banner.mu

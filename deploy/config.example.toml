@@ -1,0 +1,66 @@
+# scotmesh-chat: ScotMesh's chat hub. One conversation, three ways in: the
+# RRC room, an LXMF group and a NomadNet chat page.
+# Unknown keys are an error, so a typo can't silently leave a default.
+# Check a change with:  scotmesh-chat --config this-file --check-config
+
+data_dir = "/var/lib/scotmesh-chat"
+backbone = "rns.scotmesh.net:4242"      # a Reticulum TCP server
+log_level = "info"                      # debug, info, warn or error
+log_format = "text"                     # text or json (json suits a container)
+timezone = "Europe/London"              # the nightly backup's clock; UTC if unset
+
+# Every key here can also come from a SCOTMESH_CHAT_* environment variable
+# instead (SCOTMESH_CHAT_BACKBONE, SCOTMESH_CHAT_HUB_NAME, ...), which is how
+# a container is usually configured. See docs/configuration.md for the full
+# list and docs/banner.md for page.banner_file below.
+
+# Hub operators: identity hashes allowed /kline, /release, /stats, and who
+# are room operators everywhere.
+admins = []
+
+[hub]
+name = "ScotMesh"
+group_room = "scotmesh"                 # the room the LXMF group and the page carry
+retention = "168h"                      # how long messages are kept
+posts_per_minute = 30                   # per identity, across every way in
+max_body_bytes = 2000
+replay_max = 50                         # catch-up cap on reconnect
+replay_first_visit = 10
+
+[[hub.rooms]]                           # rooms that always exist and are never pruned
+name = "scotmesh"
+topic = "ScotMesh - Scotland's Reticulum community"
+
+[rrc]
+enabled = true
+identity = "identities/rrc-hub"         # relative to data_dir; this is the hub's address
+announce_interval = "30m"
+greeting = [
+  "Welcome to the ScotMesh RRC hub. /join scotmesh to join the main room.",
+  "When you reconnect you get what was said since you left; /history shows more.",
+]
+include_joined_member_list = false
+max_msg_body_bytes = 350
+rate_per_minute = 240
+
+[group]
+enabled = true
+identity = "identities/group"
+display_name = "ScotMesh Chat – send /join"
+name = "ScotMesh Chat"
+propagation_node = "c283b754e0acc11ce48d2f5e29167e0c"   # where messages wait for members who are away
+announce_interval = "30m"
+max_stamp_cost = 16
+join_digest = 10
+
+[page]
+enabled = true
+identity = "identities/page"
+node_name = "ScotMesh Chat"
+title = "ScotMesh Chat"
+# A NomadNet page about the chat, linked from the chat and help pages.
+wiki_url = "10a839df2c50635bcb0c8a299b9ca0f8:/page/wiki/The_chat_room.mu"
+announce_interval = "30m"
+# A Micron file shown at the top of the chat page. Leave unset for the
+# built-in Saltire; point at an empty file (or /dev/null) for no banner.
+# banner_file = "banner.mu"

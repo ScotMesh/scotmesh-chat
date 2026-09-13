@@ -1,0 +1,14 @@
+{
+  "_about": "SPEC \u00a76.7.6 LINKIDENTIFY body, generated from upstream Python RNS. The initiator identity and link_id are the SAME pinned values used by reticulum-specifications test-vectors/identities.json (label 'alice') and test-vectors/links.json (vector 'alice_to_bob_aes256cbc'), so this vector chains onto the existing handshake vector: alice is that handshake's initiator, and LINKIDENTIFY is initiator-emitted. Ed25519 is RFC 8032 deterministic, so the signature is reproducible from the pinned private key.",
+  "generator": "upstream RNS Identity.sign(), mirroring RNS/Link.py identify()",
+  "rns_version_at_generation": "1.5.0",
+  "verifies_spec_sections": [
+    "6.7.6"
+  ],
+  "link_id_hex": "7ee5fe3e4952c9ac4519b537f6278474",
+  "public_key_hex": "76fce269b2356a51b6a832a1a25099155acb20733b453f9538aaa8069e854d5a780708b44424373474ee1607c3f2b4a1cd5643de508e106e6b8cf4a10f00ec7c",
+  "signature_hex": "b3f4695a76e91284c6b96ceb7f8f1a18934040ec016df5b2826546860717124cb7fff073369c90ed1093f78b6f408f166f9b74593987f2a8d1516dde6d795b0a",
+  "body_hex": "76fce269b2356a51b6a832a1a25099155acb20733b453f9538aaa8069e854d5a780708b44424373474ee1607c3f2b4a1cd5643de508e106e6b8cf4a10f00ec7cb3f4695a76e91284c6b96ceb7f8f1a18934040ec016df5b2826546860717124cb7fff073369c90ed1093f78b6f408f166f9b74593987f2a8d1516dde6d795b0a",
+  "signature_over_link_id_only_hex": "fc2efbfe1135b3eb43119e6de5fdfec43a48decc1c812b5dbede8b36c31fc6bd3956d5db10297f4e4eb1595d1bc73e4435e8fcc8a6ae52a0d72a4e0f6c79fb0e",
+  "_trap": "signature_over_link_id_only_hex is what an implementation produces if it signs link_id instead of link_id||public_key. \u00a76.7.6 calls this out explicitly; a conforming verifier MUST reject it."
+}

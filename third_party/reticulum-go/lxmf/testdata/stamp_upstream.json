@@ -1,0 +1,12 @@
+{
+  "_source": "upstream RNS 1.4.2 / LXMF 1.1.1, lxmf/testdata/gen_stamp_upstream.py",
+  "material_hex": "062675b43d516c1678be06ec7d5719f3c3048dda5695eb00df594f2c3636f575",
+  "stamp_cost": 8,
+  "stamp_hex": "0000000000000000000000000000000000000000000000000000000000000198",
+  "stamp_value": 8,
+  "workblock_len": 768000,
+  "workblock_pn_rounds": 1000,
+  "workblock_pn_sha256_hex": "26ac84477be5198bffbfa7ddccd0f71246d33e9de5793fd23c9e6651203b192e",
+  "workblock_rounds": 3000,
+  "workblock_sha256_hex": "7238a24fe1132e4e620a06b79d4156a7dbd4f1c367d7d8eb2910138c6158f0a5"
+}

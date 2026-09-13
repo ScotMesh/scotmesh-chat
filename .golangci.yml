@@ -1,0 +1,71 @@
+# Quality gate for scotmesh-chat. CONTRIBUTING.md explains the rules;
+# CI runs exactly this configuration.
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  default: none
+  enable:
+    - bodyclose
+    - copyloopvar
+    - errcheck
+    - errorlint
+    - gocritic
+    - gosec
+    - govet
+    - ineffassign
+    - misspell
+    - nilerr
+    - noctx
+    - revive
+    - staticcheck
+    - unconvert
+    - unparam
+    - unused
+    - wastedassign
+  settings:
+    errcheck:
+      check-type-assertions: true
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment # readability of structs beats a few bytes
+        - shadow         # `err :=` in nested scopes is idiomatic here
+    # misspell has no locale set: Go APIs use US spelling (Normalize, Color)
+    # and prose in comments may be British; only real misspellings are flagged.
+    revive:
+      rules:
+        - name: exported
+        - name: package-comments
+        - name: var-naming
+        - name: indent-error-flow
+        - name: error-strings
+        - name: receiver-naming
+        - name: unused-parameter
+        - name: context-as-argument
+    gosec:
+      excludes:
+        - G104 # duplicate of errcheck
+    gocritic:
+      enabled-tags: [diagnostic, performance]
+      disabled-checks:
+        - hugeParam    # value receivers on small immutable structs read better
+        - rangeValCopy # same trade-off for loops over small structs
+  exclusions:
+    presets:
+      - std-error-handling
+    rules:
+      - path: _test\.go
+        linters: [gosec, unparam, noctx, errorlint]
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/ScotMesh/scotmesh-chat
