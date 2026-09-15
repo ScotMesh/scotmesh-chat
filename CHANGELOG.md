@@ -40,6 +40,14 @@ All notable changes to this project are documented here. The format follows
   one NOTICE per line, but MeshChatX and NomadNet (before 1.4.3) only read
   the rooms when the header and the rooms arrive in one NOTICE, as rrcd
   sends it. It's now one NOTICE whenever it fits a packet.
+- LXMF messages for members who are away now reach the propagation node.
+  Every upload failed with "LRPROOF did not arrive before timeout", so away
+  members only got their messages when a direct retry happened to find them
+  online, often hours later or right after they messaged the group. Link
+  requests and packets to a destination attached to the backbone node itself
+  (lxmd, a NomadNet node) went out relay-addressed (HEADER_2), which rnsd
+  does not pass on to its local clients; they now go plain, as Python RNS
+  sends them. Reticulum-go patch 2.
 
 ## [1.0.0-rc.4] - 2026-09-13
 
