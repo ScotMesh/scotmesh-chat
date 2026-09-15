@@ -1519,7 +1519,7 @@ func (t *Transport) SendOverLink(responderDestHash []byte, plaintext []byte, tim
 	if len(plaintext) > LinkMDU {
 		var transportID []byte
 		if known := t.Recall(responderDestHash); known != nil {
-			transportID = known.TransportID
+			transportID = known.RouteTransportID()
 		}
 		// A Resource transfer of this size needs far longer than the
 		// caller's link-DATA timeout (the handshake already completed
@@ -1671,7 +1671,7 @@ func (t *Transport) acquireLinkTo(responderDestHash []byte, deadline time.Time) 
 	if err != nil {
 		return nil, fmt.Errorf("start link: %w", err)
 	}
-	applyMultihopRouting(lrReq, known.TransportID)
+	applyMultihopRouting(lrReq, known.RouteTransportID())
 	if err := t.Broadcast(lrReq); err != nil {
 		t.linkManager.CloseLink(link.ID)
 		return nil, fmt.Errorf("%w: broadcast LINKREQUEST: %v", ErrLinkSendFailed, err)
@@ -1741,6 +1741,20 @@ func (t *Transport) handleLinkProof(p *Packet) {
 // sha256SumLen32 is a tiny helper that wraps sha256.Sum256 so callers
 // don't need an extra import for one line.
 func sha256SumLen32(b []byte) [32]byte { return sha256.Sum256(b) }
+
+// RouteTransportID is the transport_id to address packets for this
+// destination through, or nil to send them plain (HEADER_1). An announce
+// that arrived as HEADER_2 with hops 0 came from a destination attached to
+// the relaying node itself (a local client of its rnsd, such as lxmd).
+// Python RNS counts that as one hop and sends HEADER_1, and rnsd does not
+// reliably strip a HEADER_2 addressed to itself before handing the packet
+// to a local client, so a HEADER_2 link request to it is never answered.
+func (k *KnownIdentity) RouteTransportID() []byte {
+	if k == nil || k.Hops == 0 {
+		return nil
+	}
+	return k.TransportID
+}
 
 // applyMultihopRouting promotes a HEADER_1 broadcast packet to HEADER_2
 // network-transport with the given transport_id, so transit relays can

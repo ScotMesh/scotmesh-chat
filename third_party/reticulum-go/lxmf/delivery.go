@@ -333,7 +333,7 @@ func (d *Delivery) SendWithID(recipientDestHash []byte, title, content []byte, f
 		return nil, fmt.Errorf("encrypt: %w", err)
 	}
 
-	pkt := buildOutboundPacket(recipientDestHash, ciphertext, known.TransportID)
+	pkt := buildOutboundPacket(recipientDestHash, ciphertext, known.RouteTransportID())
 
 	// Delivery confirmation (SPEC §6.5): register for the recipient's
 	// proof BEFORE broadcasting — a fast/local recipient can ack before

@@ -42,3 +42,26 @@ responder:
   (it was read unlocked).
 
 **Tests.** `rns/link_hooks_test.go`. The full upstream suite passes with `-race`.
+
+## 2. Plain addressing for destinations on the relaying node
+
+**Why.** `KnownIdentity.TransportID` is captured from any announce that
+arrived as HEADER_2, and every link request, Resource and opportunistic
+LXMF packet to that destination was then sent HEADER_2 through it, even at
+hops 0. An announce with hops 0 over HEADER_2 comes from a destination
+attached to the relay itself: a local client of its rnsd, such as lxmd's
+propagation node. Python RNS counts that as one hop and sends HEADER_1.
+rnsd 1.5.2 forwards a HEADER_2 packet addressed to itself for a hops-0
+destination to the local client without stripping the transport header, and
+the link request is never answered. In production every upload to the
+ScotMesh propagation node failed with `ErrLinkHandshakeTimeout`, while a
+stock Python client on the same backbone linked to it in 0.1 s.
+
+**What.** `KnownIdentity.RouteTransportID()` returns the transport_id only
+when hops is at least 1. `acquireLinkTo`, the Resource path of
+`SendOverLink` and `Delivery.SendWithID` use it instead of reading
+`TransportID` directly.
+
+**Tests.** `rns/route_header_test.go`: the link request for a hops-0
+destination is HEADER_1 (failed before the change) and a hops-1 destination
+is still HEADER_2 through the relay.
