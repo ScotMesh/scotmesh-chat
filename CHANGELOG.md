@@ -35,6 +35,12 @@ All notable changes to this project are documented here. The format follows
   interrupted backup can't be mistaken for a complete one, and it no longer
   counts manual `hub-before-*.db` copies towards its retention count.
 
+### Fixed
+- RRC clients' room lists are no longer empty. The `/list` reply went out
+  one NOTICE per line, but MeshChatX and NomadNet (before 1.4.3) only read
+  the rooms when the header and the rooms arrive in one NOTICE, as rrcd
+  sends it. It's now one NOTICE whenever it fits a packet.
+
 ## [1.0.0-rc.4] - 2026-09-13
 
 People, moderation and one command set (ADR 0007, ADR 0008, ADR 0009).

@@ -51,6 +51,9 @@ type CommandRequest struct {
 type Reply struct {
 	Lines []string
 	Error bool // RRC sends a one-line error as ERROR rather than NOTICE
+	// Whole asks RRC to send the lines as one NOTICE when they fit: clients
+	// parse the /list reply as a block, header and rooms together.
+	Whole bool
 	// History is set by /history: messages to show, oldest first, with
 	// HistoryNote as the opening line.
 	History     []store.Message
