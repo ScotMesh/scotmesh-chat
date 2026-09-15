@@ -6,6 +6,24 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-09-15
+
+### Fixed
+- RRC clients' room lists are no longer empty. The `/list` reply went out
+  one NOTICE per line, but MeshChatX and NomadNet (before 1.4.3) only read
+  the rooms when the header and the rooms arrive in one NOTICE, as rrcd
+  sends it. It's now one NOTICE whenever it fits a packet.
+- LXMF messages for members who are away now reach the propagation node.
+  Every upload failed with "LRPROOF did not arrive before timeout", so away
+  members only got their messages when a direct retry happened to find them
+  online, often hours later or right after they messaged the group. Link
+  requests and packets to a destination attached to the backbone node itself
+  (lxmd, a NomadNet node) went out relay-addressed (HEADER_2), which rnsd
+  does not pass on to its local clients; they now go plain, as Python RNS
+  sends them. Reticulum-go patch 2.
+
+## [1.0.0] - 2026-09-13
+
 ### Added
 - `[page] banner_file` (or `SCOTMESH_CHAT_PAGE_BANNER_FILE`): a Micron file
   shown at the top of the chat page in place of the Saltire, which stays the
@@ -34,20 +52,6 @@ All notable changes to this project are documented here. The format follows
 - The nightly backup writes to a temp file and renames it into place, so an
   interrupted backup can't be mistaken for a complete one, and it no longer
   counts manual `hub-before-*.db` copies towards its retention count.
-
-### Fixed
-- RRC clients' room lists are no longer empty. The `/list` reply went out
-  one NOTICE per line, but MeshChatX and NomadNet (before 1.4.3) only read
-  the rooms when the header and the rooms arrive in one NOTICE, as rrcd
-  sends it. It's now one NOTICE whenever it fits a packet.
-- LXMF messages for members who are away now reach the propagation node.
-  Every upload failed with "LRPROOF did not arrive before timeout", so away
-  members only got their messages when a direct retry happened to find them
-  online, often hours later or right after they messaged the group. Link
-  requests and packets to a destination attached to the backbone node itself
-  (lxmd, a NomadNet node) went out relay-addressed (HEADER_2), which rnsd
-  does not pass on to its local clients; they now go plain, as Python RNS
-  sends them. Reticulum-go patch 2.
 
 ## [1.0.0-rc.4] - 2026-09-13
 
@@ -168,7 +172,9 @@ People, moderation and one command set (ADR 0007, ADR 0008, ADR 0009).
 - Bridge between the #scotmesh RRC room, an LXMF group and a NomadNet chat
   page, with offline delivery through the propagation node.
 
-[Unreleased]: https://github.com/ScotMesh/scotmesh-chat/compare/v1.0.0-rc.4...HEAD
+[Unreleased]: https://github.com/ScotMesh/scotmesh-chat/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/ScotMesh/scotmesh-chat/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/ScotMesh/scotmesh-chat/compare/v1.0.0-rc.4...v1.0.0
 [1.0.0-rc.4]: https://github.com/ScotMesh/scotmesh-chat/compare/v0.1.1...v1.0.0-rc.4
 [0.1.1]: https://github.com/ScotMesh/scotmesh-chat/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/ScotMesh/scotmesh-chat/releases/tag/v0.1.0
