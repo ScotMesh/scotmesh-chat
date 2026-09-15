@@ -40,7 +40,8 @@ func encode(e *wire.Envelope) ([]byte, error) {
 
 // noticeFrames turns text into NOTICE frames: one per line, each line split
 // so every frame fits the link. MeshChatX shows only the first line of a
-// multi-line NOTICE, and rrcd sends one per line too.
+// multi-line NOTICE, and rrcd chunks long text one line per NOTICE too
+// (its /list reply is the exception; see Server.command).
 func (s *Server) noticeFrames(t wire.Type, room, text string) [][]byte {
 	var frames [][]byte
 	for _, line := range strings.Split(text, "\n") {

@@ -879,3 +879,24 @@ func TestWhispersAreDirectNotices(t *testing.T) {
 		}
 	}
 }
+
+// MeshChatX and NomadNet (before 1.4.3) parse a /list reply only when the
+// header and the rooms arrive in one NOTICE, as rrcd sends it; one NOTICE per
+// line leaves their room list empty.
+func TestListReplyIsOneNotice(t *testing.T) {
+	e := newEnv(t)
+	c := e.client(t)
+	c.connect()
+	c.hello("Alex")
+	c.sendEnv(wire.TypeJoin, "den", nil, "")
+	c.expect(wire.TypeJoined, "")
+	c.sendEnv(wire.TypeMsg, "den", "/room register", "Alex")
+	c.expect(wire.TypeNotice, "registered room den")
+
+	c.sendEnv(wire.TypeMsg, "", "/list", "Alex") // as both clients send it
+	want := "Registered public rooms:\n  den\n  scotmesh - ScotMesh - Scotland's Reticulum community"
+	f := c.expect(wire.TypeNotice, "Registered public rooms:")
+	if body, _ := f.BodyString(); body != want || f.Room != "" {
+		t.Errorf("/list reply room %q body %q, want %q", f.Room, body, want)
+	}
+}

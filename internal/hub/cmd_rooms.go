@@ -91,7 +91,9 @@ func cmdList(c *cmd) error {
 		c.say("No public rooms registered")
 		return nil
 	}
-	// NomadNet parses this block: a header line, then "  name - topic".
+	// NomadNet and MeshChatX parse this block: a header line, then
+	// "  name - topic", all in one notice.
+	c.reply.Whole = true
 	c.sayLines("Registered public rooms:\n" + strings.Join(lines, "\n"))
 	return nil
 }

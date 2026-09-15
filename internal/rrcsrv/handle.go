@@ -552,6 +552,20 @@ func (s *Server) command(ctx context.Context, ss *session, env *wire.Envelope, t
 	if reply.Error && len(reply.Lines) == 1 {
 		t = wire.TypeError
 	}
+	if reply.Whole {
+		// rrcd sends /list as one multi-line NOTICE, and MeshChatX and
+		// NomadNet before 1.4.3 find no rooms in it any other way. Too long
+		// for one frame, it goes line by line, which NomadNet 1.4.3 rejoins.
+		e := s.hubEnvelope(t, "")
+		e.Body = wire.TextBody(reply.Text())
+		if len(reply.Text()) <= s.bodyBudget(e) {
+			if frame, err := encode(e); err == nil {
+				s.sendFrame(ss, frame)
+				return
+			}
+		}
+		s.log.Debug("rrc: reply too long for one notice; sending it line by line", "link", short(ss.link), "bytes", len(reply.Text()))
+	}
 	s.sendFrames(ss, s.noticeFrames(t, "", reply.Text()))
 }
 
